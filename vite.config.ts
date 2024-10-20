@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { viteMockServe } from "vite-plugin-mock";
+import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
 import Icons from "unplugin-icons/vite";
 import Components from "unplugin-vue-components/vite";
@@ -13,6 +14,9 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   // 获取当前工作目录
   const root = process.cwd();
+  function resolve(dir) {
+    return path.join(__dirname, '.', dir)
+  }
   // 获取环境变量
   const env = loadEnv(mode, root);
   console.log(env)
@@ -100,12 +104,14 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         },
       },
     },
-    // 配置别名
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-        '#': fileURLToPath(new URL('./types', import.meta.url)),
-      },
+   // 配置别名
+   resolve: {
+    alias: {
+      '@': resolve('src'),
+      static: resolve('public/static'),
     },
+    // 忽略后缀名的配置选项, 添加 .vue 选项时要记得原本默认忽略的选项也要手动写入
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+  },
   };
 });

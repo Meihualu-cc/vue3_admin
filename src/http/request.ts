@@ -1,14 +1,15 @@
 import axios from 'axios';
 import type {
   AxiosInstance,
-  AxiosRequestConfig,
   AxiosResponse,
   AxiosError,
   InternalAxiosRequestConfig,
 } from 'axios';
 
 const service: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: Boolean(import.meta.env.VITE_APP_USE_MOCK)
+  ? import.meta.env.VITE_APP_MOCK_BASEURL
+  : import.meta.env.VITE_APP_API_BASEURL,
     timeout: 15000,
   });
 

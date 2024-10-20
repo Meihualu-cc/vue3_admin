@@ -3,7 +3,7 @@ import type { UserConfig, ConfigEnv } from 'vite';
 import { fileURLToPath } from 'url';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-
+import { viteMockServe } from "vite-plugin-mock";
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   // 获取当前工作目录
   const root = process.cwd();
@@ -22,6 +22,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       vue(),
       // jsx文件编译插件
       vueJsx(),
+      viteMockServe({
+        mockPath: 'mock',
+        //在 vite-plugin-mock 的新版本中，localEnabled 属性已经被 enable 所取代。
+        enable: mode === 'development',  // 仅在开发环境启用,
+      })
     ],
     // 运行后本地预览的服务器
     server: {

@@ -70,7 +70,7 @@ const requestInstance = <T = any>(config: AxiosRequestConfig): Promise<T> => {
                     message: data.message,
                     type: 'success'
                 }); // 此处返回data信息 也就是 api 中配置好的 Response类型
-                resolve(data.data as T);
+                resolve(data as T);
             }
         });
     });

@@ -1,4 +1,4 @@
-import { post, get } from '@/http/request';
+import { post } from '@/http/request';
 
 export type LoginRequest = {
     username: string;

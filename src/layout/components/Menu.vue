@@ -2,6 +2,8 @@
      <el-menu
         router
         class="el-menu-vertical-demo"
+        default-active="/"
+        mode="vertical"
       >
       <div v-for="(item,index) in menuList">
         <el-menu-item :index="item.path" :key="index">{{ item.meta.title }}</el-menu-item>

@@ -34,7 +34,6 @@
  import type { ComponentSize } from 'element-plus'
  let currentPage = ref(1)
  let pageSize = ref(10)
- const total = ref(0)
  const size = ref<ComponentSize>('default')
 
  // 项目接口

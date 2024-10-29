@@ -41,14 +41,17 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     ElementPlus({}),
     // 自动引入组件及ICON
     AutoImport({
-        resolvers: [IconsResolver(), ElementPlusResolver()],
+      //定义需要自动引入的框架 
+        imports: ['vue','vue-router'],
+        eslintrc: { enabled: true  },
+        resolvers: [ ElementPlusResolver(),IconsResolver()],
         dts: fileURLToPath(
             new URL("./types/auto-imports.d.ts", import.meta.url),
         ),
     }),
     // 自动注册组件
     Components({
-        resolvers: [IconsResolver(), ElementPlusResolver()],
+        resolvers: [ ElementPlusResolver(),IconsResolver()],
         dts: fileURLToPath(
             new URL("./types/components.d.ts", import.meta.url),
         ),

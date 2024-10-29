@@ -29,7 +29,6 @@
     </div>
   </template>
   <script lang="ts" setup>
- import { onMounted, ref ,computed,reactive,watch} from 'vue';
  import { getProjectList } from '@/api/project';
  import type { ComponentSize } from 'element-plus'
  let currentPage = ref(1)

@@ -17,6 +17,7 @@
 </template>
 <script lang="ts" setup>
 import {getAuthList} from "@/api/auth"
+import {IAuth} from "@/types/common"
 let checkedNode = ref<number[]>([])
 const  route = useRoute()
 const {query} = route
@@ -24,12 +25,7 @@ if(query.auth){
     checkedNode.value = query.auth as any
 }
                        
-interface IAuth{
-    name:string;
-    roleId:number;
-    viewRole:string;
-    roleList:IAuth[]
-}
+
 const treeRef = ref<any>(null)
 const authList = ref<IAuth[]>([])
 onMounted(() => {

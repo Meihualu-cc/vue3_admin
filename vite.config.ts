@@ -27,6 +27,13 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     base: '/',
     publicDir: fileURLToPath(new URL('./public', import.meta.url)), // 无需处理的静态资源位置
     assetsInclude: fileURLToPath(new URL('./src/assets', import.meta.url)), // 需要处理的静态资源位置
+    css: {
+      preprocessorOptions: {
+        less: {
+          additionalData: `@import "@/styles/variable.less";`
+        },
+      },
+    },
     plugins: [
       // Vue模板文件编译插件
       vue(),
@@ -45,16 +52,19 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         imports: ['vue','vue-router'],
         eslintrc: { enabled: true  },
         resolvers: [ ElementPlusResolver(),IconsResolver()],
-        dts: fileURLToPath(
-            new URL("./types/auto-imports.d.ts", import.meta.url),
-        ),
+
+        dts: fileURLToPath(new URL("./types/auto-imports.d.ts", import.meta.url),),
+      
     }),
     // 自动注册组件
     Components({
         resolvers: [ ElementPlusResolver(),IconsResolver()],
-        dts: fileURLToPath(
-            new URL("./types/components.d.ts", import.meta.url),
-        ),
+        // 生成 `components.d.ts` 全局声明，
+        // 还接受自定义文件名的路径
+        // 默认值：如果安装了包 typescript，则为“true”
+        dts: fileURLToPath(new URL("./types/components.d.ts", import.meta.url),),
+          // 要搜索组件的目录的相对路径。
+          dirs: [ fileURLToPath(new URL("./src/components", import.meta.url), ),],
     }),
     // 自动安装图标
     Icons({

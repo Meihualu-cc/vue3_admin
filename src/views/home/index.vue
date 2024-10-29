@@ -31,17 +31,12 @@
   <script lang="ts" setup>
  import { getProjectList } from '@/api/project';
  import type { ComponentSize } from 'element-plus'
+ import{IProject} from '@/types/common';
  let currentPage = ref(1)
  let pageSize = ref(10)
  const size = ref<ComponentSize>('default')
 
- // 项目接口
-interface IProject {
-    userId: number; // 项目
-    id: number; // 项目id
-    title: string; // 项目标题
-    introduce: string; // 项目介绍
-}
+ 
 let projectList = ref<IProject[]>([])
 let searchData = reactive({
     userId: 0,

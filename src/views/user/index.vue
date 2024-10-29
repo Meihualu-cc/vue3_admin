@@ -61,30 +61,7 @@
 <script lang="ts" setup>    
 import { getUserList } from '@/api/user';
 import {getRoleList} from '@/api/role'
-interface IRole{
-    role:number;
-    roleName: string;
-}
-interface IUser{
-    id:number;
-    userName:string;
-    nickName: string;
-    role: IRole[];
-}
-interface IRoleWithAuth{
-    roleId:number;
-    roleName: string;
-    auth:number[];
-}
-interface IQueryUser{
-    nickName:string;
-    role:number;
-}
-interface IEditUser{
-    id:number;
-    nickName:string;
-    role:number[];
-}
+import {IEditUser,IRoleWithAuth,IQueryUser,IUser} from '@/types/common'
 const editShow= ref(false)
 const editUser = reactive<IEditUser>({
     id:0, 

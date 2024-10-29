@@ -19,13 +19,10 @@
   </template>
   <script lang="ts" setup>
 import { getRoleList } from '@/api/role';
+import{IRoleTree} from "@/types/common"
 const router = useRouter()
-interface IRole {
-  roleId:number;
-  roleName:string; 
-  authority:any[];
-}
-const roleList = ref<IRole[]>([])
+
+const roleList = ref<IRoleTree[]>([])
 
   onMounted(() => {
     fetchRoleList();
@@ -35,7 +32,7 @@ const roleList = ref<IRole[]>([])
       roleList.value = res.data;
     });
   };
-const onchangeAuth  = (row:IRole) => {
+const onchangeAuth  = (row:IRoleTree) => {
   router.push({
     path:'/auth',
     query:{

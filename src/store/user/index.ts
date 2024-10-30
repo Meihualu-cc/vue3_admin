@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import pinia from '@/store';
-import { userLogin, refreshUserInfo } from '@/api/user';
-import router from '@/router';
+import { userLogin } from '@/api/user';
+// import router from '@/router';
 
 export interface UserState {
     username: string;
@@ -19,32 +19,27 @@ export const useUserStoreHook = defineStore('userInfo', {
     actions: {
         storeUserLogin(data) {
             return userLogin(data).then((res) => {
-                this.username = res.username;
-                this.roles = res.roles;
-                this.accessToken = res.accessToken;
+                this.username = res.data.username;
+                this.roles = res.data.roles;
+                this.accessToken = res.data.accessToken;
                 return res;
             });
-        },
-        logout() {
-            sessionStorage.removeItem('userInfo');
-            this.accessToken = '';
-            router.push('/login');
-        },
-        stroeRefreshUserInfo() {
-            if (this.username == '大伟' && this.accessToken != '') {
-                refreshUserInfo({
-                    accessToken: this.accessToken
-                })
-                    .then((res) => {
-                        this.username = res.username;
-                        this.roles = res.roles;
-                        this.accessToken = res.accessToken;
-                    })
-                    .catch(() => {
-                        this.accessToken = '';
-                    });
-            }
         }
+        // stroeRefreshUserInfo() {
+        //     if (this.username == '大伟' && this.accessToken != '') {
+        //         refreshUserInfo({
+        //             accessToken: this.accessToken
+        //         })
+        //             .then((res) => {
+        //                 this.username = res.username;
+        //                 this.roles = res.roles;
+        //                 this.accessToken = res.accessToken;
+        //             })
+        //             .catch(() => {
+        //                 this.accessToken = '';
+        //             });
+        //     }
+        // }
     },
     // 进行持久化存储
   persist: {

@@ -1,6 +1,8 @@
 import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import { useSettingStore } from '@/store/setting';
+const settingStore = useSettingStore();
 // 配置路由
 // const routes: Array<RouteRecordRaw> = [
 //     {
@@ -48,6 +50,26 @@ const router = createRouter({
 //         return false;
 //     }
 // }
+export function getTitle(name: string,routers:RouteRecordRaw[]){
+    const names:string[] = []
+    while(true){
+        names.push(name)
+        const currentRouterObj = routers.find((item) => item.name === name);
+        const parentRouterObj = routers.find((item) => item.name === currentRouterObj?.meta?.parentRouter);
+        if(parentRouterObj){
+            name = parentRouterObj.name as string
+            continue
+        }else{
+            break
+        }
+    }
+    return names.reverse() 
+}
+const handleRouters=(currentName:string)=>{
+const titleArr= getTitle(currentName,router.getRoutes())
+settingStore.setTitle(titleArr)
+console.log('titleArr ',titleArr)
+}
 const noStatusPage = ['/login', '/about'];
 router.beforeEach(async (_to, _from, next) => {
     NProgress.start();
@@ -58,6 +80,7 @@ router.beforeEach(async (_to, _from, next) => {
     } else {
         next('/login');
     }
+    handleRouters(_to.name as string)
 });
 router.afterEach((_to) => {
     NProgress.done();

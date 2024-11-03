@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import type { UserConfig, ConfigEnv } from 'vite';
+import {visualizer} from 'rollup-plugin-visualizer'; 
 import { fileURLToPath } from 'url';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
@@ -11,6 +12,9 @@ import Components from "unplugin-vue-components/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import ElementPlus from "unplugin-element-plus/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import ViteCompression from "vite-plugin-compression";
+import brotli from 'rollup-plugin-brotli';
+import {createHtmlPlugin} from 'vite-plugin-html';
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   // 获取当前工作目录
   const root = process.cwd();
@@ -35,6 +39,21 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       },
     },
     plugins: [
+      createHtmlPlugin({
+        inject:{
+          data:{
+            momentscript:'<script src="//cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"></script>', 
+            echartscript:'<script src="//cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>'
+          }
+        }
+      }),
+      brotli({}),
+      // 压缩配置
+      // ViteCompression({
+      //    threshold: 20*1024,//超过20kb才压缩 
+      //    ext: '.gz',//压缩后缀 
+      //    algorithm: 'gzip',//压缩算法
+      // }),
       // Vue模板文件编译插件
       vue(),
       // jsx文件编译插件
@@ -95,8 +114,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
-    },
-    // 打包配置
+    },  
+    // 打包配置  
+    // vite打包基于rollup
     build: {
       // 关闭 sorcemap 报错不会映射到源码
       sourcemap: false,
@@ -108,8 +128,23 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         input: {
           index: fileURLToPath(new URL('./index.html', import.meta.url)),
         },
+        plugins:[
+          visualizer({open:true}), 
+        ], 
         // 静态资源分类打包
         output: {
+          //该选项用于为代码分割设置一个以字节为单位的最小 chunk 大小
+          experimentalMinChunkSize: 20 * 1024, 
+          // 该选项允许你创建自定义的公共 chunk （可以为对象形式也可以为函数形式，为函数形式时每个被解析的模块都会经过该函数处理）
+          manualChunks: (id: string) => {
+              if (id.includes('html-canvans')) {
+                  return 'html-canvans';
+              }
+              if (id.includes('node_modules')) {
+                  return 'vendor';
+              }
+              // return 'index';
+          },
           format: 'esm',
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',

@@ -47,7 +47,7 @@ const onAddRole = () => {
     confirmButtonText: '确定',
     cancelButtonText: '取消'
   })
-  .then(({value,action}) => {
+  .then(({value}) => {
     if(value){
       roleList.value.push({
         roleId:roleList.value.length+1,
